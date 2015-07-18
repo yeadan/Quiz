@@ -1,5 +1,21 @@
 
 Añadir pregunta: <p>
 <form method="post" action="/quizes/create">
+	<p/> Temática: <select name="quiz[tema]" id="tema">
+    <option value="Otro">Otro</option>
+    <% if (quiz.tema !== "Humanidades") {%>
+    <option value="Humanidades">Humanidades</option>
+    <% } %>
+    <% if (quiz.tema !== "Ocio") {%>
+    <option value="Ocio">Ocio</option>
+  	<% } %>
+  	<% if (quiz.tema !== "Ciencia") {%>
+  	<option value="Ciencia">Ciencia</option>
+ 	<% } %>
+ 	<% if (quiz.tema !== "Tecnología") {%>
+  	<option value="Tecnología">Tecnología</option>
+  	<% } %>
+	</select><p/>
+
 	<% include _form.ejs %>
 </form>

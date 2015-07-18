@@ -17,7 +17,7 @@ exports.index = function(req,res) {
 		var busca = '%' + (req.query.search).replace(/ /g,'%') + '%';
 				console.log(busca);
     	models.Quiz.findAll({where:["pregunta like ?", busca], order:'pregunta ASC'}).then(function(quizes){
-      	res.render('quizes/index', {quizes: quizes});
+      	res.render('quizes/index', {quizes: quizes, errors: []});
     }).catch(function(error) { next(error);});
     } else {
 		models.Quiz.findAll().then(function(quizes) {
@@ -27,17 +27,14 @@ exports.index = function(req,res) {
 
 //GET /quizes/:id
 exports.show = function(req,res) {
-	//models.Quiz.findById(req.params.quizId).then(function(quiz) {
 		res.render('quizes/show', {quiz: req.quiz, errors: []});
 };
 
 //GET quizes/:id/answer
 exports.answer=function(req, res) {
-	//models.Quiz.findById(req.params.quizId).then(function(quiz) {
 	var resultado = 'Incorrecto';
 	if (req.query.respuesta === req.quiz.respuesta) {
 		resultado='Correcto';
-			//res.render('quizes/answer', {quiz: quiz, respuesta: 'Correcto'});
 	} 
 	res.render('quizes/answer', {quiz: req.quiz, respuesta: resultado, errors: []});
 };
@@ -45,7 +42,7 @@ exports.answer=function(req, res) {
 //GET /quizes/new
 exports.new = function(req,res) {
 	var quiz = models.Quiz.build( //crea objeto quiz
-		{pregunta: "Pregunta", respuesta: "Respuesta"});
+		{pregunta: "Pregunta", respuesta: "Respuesta", tema:"Tema"});
 	res.render('quizes/new', {quiz: quiz, errors: []});
 };
 
@@ -61,7 +58,7 @@ exports.create = function(req,res) {
 			} else {
 				//guarda en DB los campso pregunta y respuesta de quiz
 				quiz.
-				save({fields: ["pregunta", "respuesta"]}).
+				save({fields: ["pregunta", "respuesta", "tema"]}).
 				then(function(){res.redirect('/quizes');}) //Redirección HTTP (URL relativo) lista de preguntas
 			}
 		}
@@ -78,6 +75,7 @@ exports.edit = function(req,res) {
 exports.update = function(req,res) {
 	req.quiz.pregunta  = req.body.quiz.pregunta;
 	req.quiz.respuesta = req.body.quiz.respuesta;
+	req.quiz.tema = req.body.quiz.tema;
 
 	req.quiz.validate()
 	.then(
@@ -86,7 +84,7 @@ exports.update = function(req,res) {
 				res.render("quizes/edit", {quiz: req.quiz, errors: err.errors});
 			} else {
 				req.quiz //save: guardar campos pregunta y respuesta en DB
-				.save( {fields: ["pregunta", "respuesta"]})
+				.save( {fields: ["pregunta", "respuesta", "tema"]})
 				.then (function(){res.redirect('/quizes');});
 			}
 		}

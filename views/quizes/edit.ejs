@@ -1,4 +1,22 @@
-  	Edite la pregunta <p>
-  	<form method="post" action="/quizes/<%= quiz.id %>?_method=put" >
-  		<% include _form.ejs %>
-  	</form>
+  <h3>Edite la pregunta </h3><p>
+  <form method="post" action="/quizes/<%= quiz.id %>?_method=put" >
+ 	Temática: <select name="quiz[tema]" id="tema">
+   	<% if (quiz.tema !== "Otro") {%>
+	<option value="<%= quiz.tema %>" selected><%= quiz.tema %></option>
+    <% } %>
+    <option value="Otro">Otro</option>
+    <% if (quiz.tema !== "Humanidades") {%>
+    <option value="Humanidades">Humanidades</option>
+    <% } %>
+    <% if (quiz.tema !== "Ocio") {%>
+    <option value="Ocio">Ocio</option>
+  	<% } %>
+  	<% if (quiz.tema !== "Ciencia") {%>
+  	<option value="Ciencia">Ciencia</option>
+ 	<% } %>
+ 	<% if (quiz.tema !== "Tecnología") {%>
+  	<option value="Tecnología">Tecnología</option>
+  	<% } %>
+	</select><p/>
+  	<% include _form.ejs %>
+  </form>
