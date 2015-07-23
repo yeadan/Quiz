@@ -2,11 +2,14 @@
       <input type="text" name="search" value=" " />
       <input type="submit" value="Enviar">
 </form>
-
+<br>
+<div align=left>
 <table>
   <% var x; for (x=0; x < quizes.length; x++) { %>       
-     <tr>
-     	<td><a href="/quizes/<%= quizes[x].id %>"><%= quizes[x].pregunta %></a></td>
+
+     	<tr>
+     	<td><p style="color:grey"><b><%= quizes[x].tema %> </b></p></td>
+     	<td align=left><a href="/quizes/<%= quizes[x].id %>"><%= quizes[x].pregunta %></a></td>
      	<td><a href="/quizes/<%= quizes[x].id %>/edit"><button>editar</button></a></td>
      	<td>
      		<form method="post" action="quizes/<%= quizes[x].id %>?_method=delete">
@@ -17,5 +20,6 @@
      </tr>
    <% } %>
 </table>
-<p/>
-<a href="/quizes/new" ><button type="button">Crear pregunta</button></a>
+<br>
+</div>
+<a align=center href="/quizes/new" ><button type="button">Crear pregunta</button></a>
