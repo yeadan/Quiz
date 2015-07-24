@@ -3,23 +3,28 @@
       <input type="submit" value="Enviar">
 </form>
 <br>
+
 <div align=left>
 <table>
   <% var x; for (x=0; x < quizes.length; x++) { %>       
-
      	<tr>
      	<td><p style="color:grey"><b><%= quizes[x].tema %> </b></p></td>
      	<td align=left><a href="/quizes/<%= quizes[x].id %>"><%= quizes[x].pregunta %></a></td>
-     	<td><a href="/quizes/<%= quizes[x].id %>/edit"><button>editar</button></a></td>
-     	<td>
-     		<form method="post" action="quizes/<%= quizes[x].id %>?_method=delete">
-     			<button type="submit" onClick="return confirm('Borrar: <%= quizes[x].pregunta %>');">
-     				borrar
-     			</button>
-     		</form>
+      <%if (session.user) {%>
+     	  <td><a href="/quizes/<%= quizes[x].id %>/edit"><button>editar</button></a></td>
+     	  <td>
+     		 <form method="post" action="quizes/<%= quizes[x].id %>?_method=delete">
+     			  <button type="submit" onClick="return confirm('Borrar: <%= quizes[x].pregunta %>');">
+     				 borrar
+     			  </button>
+     		 </form>
+        </td>
+      <%}%>
      </tr>
    <% } %>
 </table>
 <br>
 </div>
+<%if(session.user) {%>
 <a align=center href="/quizes/new" ><button type="button">Crear pregunta</button></a>
+<%}%>
