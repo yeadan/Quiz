@@ -28,6 +28,25 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(partials());
 
+//Controlar el tiempo de sesión, P2P modulo 9
+app.use(function(req, res, next) {
+    if (req.session.user) {
+        if (!req.session.timer) {
+            req.session.timer = Date.now();
+        }
+        if (Date.now()-req.session.timer> 120000) { 
+                        //Si está inactivo 2 minutos se hace un logout.
+            delete req.session.user;
+            req.session.timer=null;
+            console.log("Sesion cerrada por inactividad");
+        } else {
+                        // Sino, se resetea el contador de tiempo.   
+            req.session.timer = Date.now();
+        }
+    }
+    next();
+});
+
 app.use(function(req, res, next) {
     if (!req.path.match(/\/login|\/logout/)) {
         req.session.redir = req.path;
@@ -47,6 +66,9 @@ app.use(function(req, res, next) {
     err.status = 404;
     next(err);
 });
+
+
+
 
 // error handlers
 
