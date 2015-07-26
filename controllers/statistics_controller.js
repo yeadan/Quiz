@@ -7,11 +7,11 @@ exports.show = function(req, res){
     			 promedio_comentarios: '-',
     			 preg_sin_com: '-',
     			 preg_con_com: '-',
-    			 comentarios_no_pub: '--'
+    			 comentarios_no_pub: '-'
     			};
 		models.Quiz.count().then(function(result){
 		statistics.n_preguntas=result;
-		return models.Comment.count({where: ["QuizId"]});
+		return models.Comment.count({where: ['"QuizId" IS NOT NULL']});
 	}).then(function(result){
 		statistics.n_comentarios=result;
 		if(+statistics.n_preguntas>0) statistics.promedio_comentarios=result/statistics.n_preguntas;//si es 0 el número de preguntas no está definido
@@ -23,7 +23,7 @@ exports.show = function(req, res){
 	}).then(function(result){
 		statistics.preg_con_com=result.count;
 		statistics.preg_sin_com=statistics.n_preguntas - result.count;
-		return models.Comment.count({where: ['NOT "publicado" AND "QuizId"']});
+		return models.Comment.count({where: ['NOT "publicado" AND "QuizId" IS NOT NULL']});
 	}).then(function(result){
 		statistics.comentarios_no_pub=result;
 		res.render('quizes/stadistics.ejs', {statistics: statistics, errors: []});
